@@ -1,13 +1,40 @@
 version: "3.8"
 
 services:
+  client:
+    image: local/earthworm:1.3.4
+    build: .
+    restart: always
+    depends_on:
+      - api
+    env_file: "./apps/client/.env"
+    ports:
+      - 3012:3000
+    command: 
+      - npx
+      - serve
+      - apps/client/.output/public
+  api:
+    image: local/earthworm:1.3.4
+    build: .
+    restart: always
+    depends_on:
+      - db
+      - redis
+      - Logto
+    env_file: "./apps/api/.env"
+    ports:
+      - 3013:3001
+    command:
+      - pnpm
+      - prod:serve
   db:
     restart: always
     image: postgres:14-alpine
     user: postgres
     environment:
       POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: password
+      POSTGRES_PASSWORD: ${DB_POSTGRES_PASSWORD}
       POSTGRES_DB: earthworm
     volumes:
       - data:/var/lib/postgres/main-data
@@ -16,32 +43,11 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
-    ports:
-      - 5433:5432
-  testdb:
-    image: postgres:14-alpine
-    user: postgres
-    volumes:
-      - data:/var/lib/postgres/test-data
-    environment:
-      POSTGRES_USER: test
-      POSTGRES_PASSWORD: password
-      POSTGRES_DB: earthworm_test
-    ports:
-      - 5480:5432
   redis:
     image: redis:5-alpine
     restart: always
     volumes:
       - data:/var/lib/redis
-    ports:
-      - 6379:6379
-  testRedis:
-    image: redis:5-alpine
-    volumes:
-      - data:/var/lib/test-redis
-    ports:
-      - 6380:6379
   logto:
     restart: always
     depends_on:
@@ -54,7 +60,7 @@ services:
       - 3011:3011
     environment:
       - TRUST_PROXY_HEADER=1
-      - DB_URL=postgres://postgres:p0stgr3s@logtoPostgres:5432/logto
+      - DB_URL=postgres://postgres:${LOGTO_POSTGRES_PASSWORD}@logtoPostgres:5432/logto
       # Mandatory for GitPod to map host env to the container, thus GitPod can dynamically configure the public URL of Logto;
       # Or, you can leverage it for local testing.
       - PORT=3010
@@ -69,7 +75,7 @@ services:
       - "./.volumes/logto_db:/var/lib/postgresql/data"
     environment:
       POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: p0stgr3s
+      POSTGRES_PASSWORD: ${LOGTO_POSTGRES_PASSWORD}
     healthcheck:
       test: ["CMD-SHELL", "pg_isready"]
       interval: 10s
