@@ -2,7 +2,7 @@ version: "3.8"
 
 services:
   client:
-    image: local/earthworm:1.3.4
+    image: local/earthworm:1.4.17
     build: .
     restart: always
     depends_on:
@@ -15,7 +15,7 @@ services:
       - serve
       - apps/client/.output/public
   api:
-    image: local/earthworm:1.3.4
+    image: local/earthworm:1.4.17
     build: .
     restart: always
     depends_on:
