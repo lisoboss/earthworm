@@ -11,7 +11,7 @@ WORKDIR /usr/src/app
 
 RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile
 
-RUN pnpm build:serve
+RUN pnpm build:server
 RUN pnpm build:client
 
 CMD [ "/bin/bash" ]
