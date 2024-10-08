@@ -3,15 +3,10 @@ RUN npm config set registry https://registry.npmmirror.com \
   && npm install -g pnpm cross-env \
   && pnpm config set registry https://registry.npmmirror.com
 
-FROM base AS prod-deps
+FROM base AS build
 COPY . /app
 WORKDIR /app
 RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile
-
-FROM base AS build
-COPY . /app
-COPY --from=prod-deps /app/node_modules /app/node_modules
-WORKDIR /app
 RUN pnpm build:server
 RUN pnpm deploy --filter=api --prod /prod/api 
 RUN pnpm build:client
