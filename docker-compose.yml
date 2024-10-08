@@ -2,21 +2,21 @@ version: "3.8"
 
 services:
   client:
-    image: local/earthworm:1.4.17
-    build: .
+    image: local/earthworm/client:latest
+    build: 
+      context: .
+      target: client
     restart: always
     depends_on:
       - api
     env_file: "./apps/client/.env"
     ports:
       - 3012:3000
-    command: 
-      - npx
-      - serve
-      - apps/client/.output/public
   api:
-    image: local/earthworm:1.4.17
-    build: .
+    image: local/earthworm/api:latest
+    build: 
+      context: .
+      target: api
     restart: always
     depends_on:
       - db
@@ -25,9 +25,6 @@ services:
     env_file: "./apps/api/.env"
     ports:
       - 3013:3001
-    command:
-      - pnpm
-      - prod:serve
   db:
     restart: always
     image: postgres:14-alpine
