@@ -1,4 +1,6 @@
 FROM node:22-slim AS base
+ENV PNPM_HOME="/pnpm"
+ENV PATH="$PNPM_HOME:$PATH"
 RUN npm config set registry https://registry.npmmirror.com \
   && npm install -g pnpm cross-env \
   && pnpm config set registry https://registry.npmmirror.com
