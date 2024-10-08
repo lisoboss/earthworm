@@ -21,7 +21,7 @@ FROM base AS api
 COPY --from=build /prod/api /prod/api
 WORKDIR /prod/api
 EXPOSE 3001
-CMD [ "pnpm", "start:prod" ]
+CMD [ "cross-env", "NODE_ENV=prod", "node", "dist/src/main" ]
 
 FROM base AS client
 COPY --from=build /prod/client /prod/client
