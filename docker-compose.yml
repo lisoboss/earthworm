@@ -21,7 +21,7 @@ services:
     depends_on:
       - db
       - redis
-      - Logto
+      - logto
     env_file: "./apps/api/.env"
     ports:
       - 3013:3001
