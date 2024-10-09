@@ -10,6 +10,7 @@ services:
         - CLARITY=${CLARITY}
     restart: always
     depends_on:
+      - logto
       - api
     ports:
       - 127.0.0.1:3012:80
