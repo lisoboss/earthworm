@@ -26,6 +26,8 @@ WORKDIR /prod/api
 EXPOSE 3001
 CMD [ "cross-env", "NODE_ENV=prod", "node", "dist/src/main" ]
 
-FROM nginx:stable-alpine-slim AS client
-COPY --from=clientBuild /prod/client /usr/share/nginx/html
-EXPOSE 80
+FROM base AS client
+COPY --from=clientBuild /prod/client /prod/client
+WORKDIR /prod/client
+EXPOSE 3000
+CMD [ "npx", "serve" ]

@@ -11,7 +11,7 @@ services:
       - logto
       - api
     ports:
-      - 127.0.0.1:3012:80
+      - 127.0.0.1:3012:3000
   api:
     image: local/earthworm/api:latest
     build: 
