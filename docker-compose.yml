@@ -6,8 +6,6 @@ services:
     build: 
       context: .
       target: client
-      args:
-        - CLARITY=${CLARITY}
     restart: always
     depends_on:
       - logto
