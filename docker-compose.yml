@@ -11,9 +11,8 @@ services:
     restart: always
     depends_on:
       - api
-    env_file: "./apps/client/.env"
     ports:
-      - 127.0.0.1:3012:3000
+      - 127.0.0.1:3012:80
   api:
     image: local/earthworm/api:latest
     build: 

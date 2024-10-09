@@ -20,7 +20,7 @@ ARG CLARITY
 ENV CLARITY=${CLARITY}
 COPY apps/client/.env apps/client/.env
 RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm build:client
-RUN cp -r apps/client/dist /prod/client
+RUN mkdir -p /prod && cp -r apps/client/dist /prod/client
 
 FROM base AS api
 COPY --from=apiBuild /prod/api /prod/api
