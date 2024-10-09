@@ -9,6 +9,19 @@
   <a href="https://hellogithub.com/repository/9433615761f548cf9648434c670cd85b" target="_blank"><img src="https://abroad.hellogithub.com/v1/widgets/recommend.svg?rid=9433615761f548cf9648434c670cd85b&claim_uid=249cPWvjfNmU7dp" alt="Featured｜HelloGitHub" style="width: 250px; height: 54px;" width="250" height="54" /></a>
 </div>
 
+## 🚀 How to run all in dokcer?
+
+```shell
+# copy and edit
+cp .env.example .env
+cp ./apps/api/.env.example ./apps/api/.env.prod
+cp ./apps/client/.env.example ./apps/client/.env.prod
+
+# build and run
+docker compose build
+docker compose up -d
+```
+
 ## ⚡ Introduction
 
 By constructing sentences with conjunctions, it helps you learn English better~ 😊

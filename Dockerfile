@@ -11,12 +11,12 @@ WORKDIR /app
 RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile
 
 FROM build AS apiBuild
-COPY apps/api/.env .env
+COPY apps/api/.env.prod .env.prod
 RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm build:server
 RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm deploy --filter=api --prod /prod/api
 
 FROM build AS clientBuild
-COPY apps/client/.env .env
+COPY apps/client/.env.prod .env.prod
 RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm build:client
 RUN mkdir -p /prod && cp -r apps/client/dist /prod/client
 

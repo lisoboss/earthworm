@@ -22,7 +22,7 @@ services:
       - db
       - redis
       - logto
-    env_file: "./apps/api/.env"
+    env_file: "./apps/api/.env.prod"
     ports:
       - 127.0.0.1:3013:3001
   db:
