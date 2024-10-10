@@ -34,7 +34,7 @@ services:
       POSTGRES_PASSWORD: ${DB_POSTGRES_PASSWORD}
       POSTGRES_DB: earthworm
     volumes:
-      - data:/var/lib/postgres/main-data
+      - "./.volumes/db:/var/lib/postgres/main-data"
     healthcheck:
       test: ["CMD-SHELL", "pg_isready"]
       interval: 10s
@@ -44,7 +44,7 @@ services:
     image: redis:5-alpine
     restart: always
     volumes:
-      - data:/var/lib/redis
+      - "./.volumes/redis_db:/var/lib/redis"
   logto:
     restart: always
     depends_on:
@@ -74,7 +74,3 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
-
-volumes:
-  data:
-    driver: local
