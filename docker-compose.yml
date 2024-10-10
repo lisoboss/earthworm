@@ -34,7 +34,7 @@ services:
       POSTGRES_PASSWORD: ${DB_POSTGRES_PASSWORD}
       POSTGRES_DB: earthworm
     volumes:
-      - "./.volumes/db:/var/lib/postgres/main-data"
+      - "./.volumes/db:/var/lib/postgresql/data"
     healthcheck:
       test: ["CMD-SHELL", "pg_isready"]
       interval: 10s

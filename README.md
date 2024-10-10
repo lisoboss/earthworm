@@ -20,6 +20,9 @@ cp ./apps/client/.env.example ./apps/client/.env.prod
 # build and run
 docker compose build
 docker compose up -d
+
+# init db
+docker run --rm --net earthworm_default  -v $(pwd):/prod/api -it -e DATABASE_URL=postgres://xxx:xxxx@xxxxx:5432/earthworm local/earthworm/api:latest bash -c "pnpm install && pnpm db:init && pnpm db:upload"
 ```
 
 ## ⚡ Introduction
