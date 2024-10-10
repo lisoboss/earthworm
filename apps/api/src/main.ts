@@ -7,7 +7,11 @@ import { appGlobalMiddleware } from "./app/useGlobal";
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.enableCors({
-    origin: [/^http:\/\/localhost(:\d+)?$/, /^http:\/\/earthworm\.cuixueshe\.com(:81)?$/],
+    origin: [
+      process.env.CORS_ORIGIN,
+      /^http:\/\/localhost(:\d+)?$/, 
+      /^http:\/\/earthworm\.cuixueshe\.com(:81)?$/
+    ].filter(v => v),
   });
 
   appGlobalMiddleware(app);

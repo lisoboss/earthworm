@@ -1,67 +1,66 @@
 version: "3.8"
 
 services:
+  client:
+    image: local/earthworm/client:latest
+    build: 
+      context: .
+      target: client
+    restart: always
+    depends_on:
+      - logto
+      - api
+    ports:
+      - 127.0.0.1:3012:3000
+  api:
+    image: local/earthworm/api:latest
+    build: 
+      context: .
+      target: api
+    restart: always
+    depends_on:
+      - db
+      - redis
+      - logto
+    env_file: "./apps/api/.env.prod"
+    ports:
+      - 127.0.0.1:3013:3001
   db:
     restart: always
     image: postgres:14-alpine
-    user: postgres
+    user: root
     environment:
       POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: password
+      POSTGRES_PASSWORD: ${DB_POSTGRES_PASSWORD}
       POSTGRES_DB: earthworm
     volumes:
-      - data:/var/lib/postgres/main-data
+      - "./.volumes/db:/var/lib/postgresql/data"
     healthcheck:
       test: ["CMD-SHELL", "pg_isready"]
       interval: 10s
       timeout: 5s
       retries: 5
-    ports:
-      - 5433:5432
-  testdb:
-    image: postgres:14-alpine
-    user: postgres
-    volumes:
-      - data:/var/lib/postgres/test-data
-    environment:
-      POSTGRES_USER: test
-      POSTGRES_PASSWORD: password
-      POSTGRES_DB: earthworm_test
-    ports:
-      - 5480:5432
   redis:
     image: redis:5-alpine
     restart: always
     volumes:
-      - data:/var/lib/redis
-    ports:
-      - 6379:6379
-  testRedis:
-    image: redis:5-alpine
-    volumes:
-      - data:/var/lib/test-redis
-    ports:
-      - 6380:6379
+      - "./.volumes/redis_db:/var/lib/redis"
   logto:
     restart: always
     depends_on:
-      logtoPostgres:
+      logtodb:
         condition: service_healthy
-    image: svhd/logto:1.18.0
+    image: svhd/logto:1.20.0
     entrypoint: ["sh", "-c", "npm run cli db seed -- --swe && npm start"]
     ports:
-      - 3010:3010
-      - 3011:3011
+      - 127.0.0.1:3010:3001
+      - 127.0.0.1:3011:3002
     environment:
       - TRUST_PROXY_HEADER=1
-      - DB_URL=postgres://postgres:p0stgr3s@logtoPostgres:5432/logto
-      # Mandatory for GitPod to map host env to the container, thus GitPod can dynamically configure the public URL of Logto;
-      # Or, you can leverage it for local testing.
-      - PORT=3010
-      - ADMIN_PORT=3011
-      - ENDPOINT
-      - ADMIN_ENDPOINT
-  logtoPostgres:
+      - DB_URL=postgres://postgres:${LOGTO_POSTGRES_PASSWORD}@logtodb:5432/logto
+      - ENDPOINT=${LOGTO_ENDPOINT}
+      - ADMIN_ENDPOINT=${LOGTO_ADMIN_ENDPOINT}
+  logtodb:
     restart: always
     image: postgres:14-alpine
     user: root
@@ -69,13 +68,9 @@ services:
       - "./.volumes/logto_db:/var/lib/postgresql/data"
     environment:
       POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: p0stgr3s
+      POSTGRES_PASSWORD: ${LOGTO_POSTGRES_PASSWORD}
     healthcheck:
       test: ["CMD-SHELL", "pg_isready"]
       interval: 10s
       timeout: 5s
       retries: 5
-
-volumes:
-  data:
-    driver: local

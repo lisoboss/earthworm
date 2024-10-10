@@ -37,29 +37,29 @@
     "node": ">=20.12.2"
   },
   "devDependencies": {
-    "@ianvs/prettier-plugin-sort-imports": "^4.2.1",
+    "@ianvs/prettier-plugin-sort-imports": "^4.3.1",
     "@types/archiver": "^6.0.2",
     "@types/fs-extra": "^11.0.4",
     "@types/inquirer": "^9.0.7",
-    "@types/node": "^20.12.7",
+    "@types/node": "^20.16.11",
     "@types/semver": "^7.5.8",
     "archiver": "^7.0.1",
     "conventional-changelog-cli": "^4.1.0",
-    "dotenv": "^16.3.1",
+    "dotenv": "^16.4.5",
     "fs-extra": "^11.2.0",
-    "inquirer": "^9.2.13",
-    "lint-staged": "^15.2.2",
-    "picocolors": "^1.0.1",
-    "prettier": "^3.2.5",
+    "inquirer": "^9.3.7",
+    "lint-staged": "^15.2.10",
+    "picocolors": "^1.1.0",
+    "prettier": "^3.3.3",
     "prettier-plugin-tailwindcss": "0.5.13",
     "semver": "^7.6.3",
     "simple-git-hooks": "2.11.1",
-    "tsup": "^8.0.1",
-    "tsx": "^4.7.0",
-    "typescript": "^5.3.3"
+    "tsup": "^8.3.0",
+    "tsx": "^4.19.1",
+    "typescript": "^5.6.2"
   },
   "dependencies": {
-    "@t3-oss/env-core": "^0.7.1",
-    "zod": "^3.22.4"
+    "@t3-oss/env-core": "^0.7.3",
+    "zod": "^3.23.8"
   }
 }
